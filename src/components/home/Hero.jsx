@@ -3,6 +3,9 @@ import '@radix-ui/themes/styles.css';
 import axios from 'axios';
 import { AspectRatio } from '@radix-ui/themes';
 import { v4 as uuidv4 } from 'uuid'; // For generating unique IDs
+import Video from '../animations/Video.json';
+import Download from '../animations/Download.json';
+import Lottie from 'lottie-react';
 
 function Hero() {
   const [url, setUrl] = useState('');
@@ -15,6 +18,7 @@ function Hero() {
   const [downloadWithSoundProgress, setDownloadWithSoundProgress] = useState(0);
 
   const gridRef = useRef(null);
+  const downloadRef = useRef(null);
 
   useEffect(() => {
     const websocket = new WebSocket('ws://localhost:3000');
@@ -125,18 +129,20 @@ function Hero() {
     }
   }
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   return (
     <>
       {download ? (
-        <div className="flex justify-center items-center animate-pulse text-center mt-50">
-          <svg width="200" height="200" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M7.50005 1.04999C7.74858 1.04999 7.95005 1.25146 7.95005 1.49999V8.41359L10.1819 6.18179C10.3576 6.00605 10.6425 6.00605 10.8182 6.18179C10.994 6.35753 10.994 6.64245 10.8182 6.81819L7.81825 9.81819C7.64251 9.99392 7.35759 9.99392 7.18185 9.81819L4.18185 6.81819C4.00611 6.64245 4.00611 6.35753 4.18185 6.18179C4.35759 6.00605 4.64251 6.00605 4.81825 6.18179L7.05005 8.41359V1.49999C7.05005 1.25146 7.25152 1.04999 7.50005 1.04999ZM2.5 10C2.77614 10 3 10.2239 3 10.5V12C3 12.5539 3.44565 13 3.99635 13H11.0012C11.5529 13 12 12.5528 12 12V10.5C12 10.2239 12.2239 10 12.5 10C12.7761 10 13 10.2239 13 10.5V12C13 13.1041 12.1062 14 11.0012 14H3.99635C2.89019 14 2 13.103 2 12V10.5C2 10.2239 2.22386 10 2.5 10Z"
-              fill="currentColor"
-              fillRule="evenodd"
-              clipRule="evenodd"
-            ></path>
-          </svg>
+        <div   className="flex justify-center items-center  text-center mt-[222px]">
+
+          <Lottie  animationData={Download} loop={true} />
+
           <h1>
             {downloadProgress === 0 ? null :
               <>
@@ -201,13 +207,13 @@ function Hero() {
                         
                         <div className='flex flex-col gap-2'>
                         {/* Download button */}
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={scrollToTop}>
                           <a onClick={() => { downloadVideo(data?.itag); }} download>
                             Download {data?.qualityLabel}
                           </a>
                         </button>
                         {/* Download with sound button */}
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={scrollToTop}>
                           <a onClick={() => { downloadVideoWithSound(data?.itag); }} download>
                             Download with sound {data?.qualityLabel}
                           </a>
@@ -217,21 +223,9 @@ function Hero() {
                     );
                   })
                 ) : (
-                  <div className="flex justify-center items-center h-screen ml-50%">
-                  <svg
-                    className="w-48 h-48 animate-spin text-center"
-                    viewBox="0 0 15 15"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M3.24182 2.32181C3.3919 2.23132 3.5784 2.22601 3.73338 2.30781L12.7334 7.05781C12.8974 7.14436 13 7.31457 13 7.5C13 7.68543 12.8974 7.85564 12.7334 7.94219L3.73338 12.6922C3.5784 12.774 3.3919 12.7687 3.24182 12.6782C3.09175 12.5877 3 12.4252 3 12.25V2.75C3 2.57476 3.09175 2.4123 3.24182 2.32181ZM4 3.57925V11.4207L11.4288 7.5L4 3.57925Z"
-                      fill="currentColor"
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                    ></path>
-                  </svg>
-                </div>
+                  <div className="flex justify-center items-center h-screen">
+                    <Lottie animationData={Video} style={{ width: '50%', height: '50%' }} />
+                  </div>
                 
                 
                 )}
